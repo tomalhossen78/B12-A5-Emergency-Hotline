@@ -12,26 +12,23 @@ function getElemetNumber(id) {
 function setElement(id, value) {
     document.getElementById(id).innerText = value;
 }
-
-
-// increase the heart icon counter
-
+// eventlistener for card container
 document.getElementById('card-container').addEventListener('click', function (event) {
-    if (event.target.className.includes('fa-heart')) {
+    const cardItem = event.target.closest('.card-item');
+    // increase the heart icon counter
+    if (event.target.closest('.fa-heart')) {
         const heartCount = getElemetNumber('heart-count');
         setElement('heart-count', heartCount + 1);
     }
-})
-
-// call button functionality
-document.getElementById('card-container').addEventListener('click', function (event) {
-    if (event.target.className.includes('call-btn')) {
-        const serviceName = event.target.parentNode.parentNode.children[1].children[0].innerText;
-        const serviceNum = event.target.parentNode.parentNode.children[2].children[0].innerText;
+    // call button functionality
+     const callButton = event.target.closest('.call-btn');
+     if (callButton) {
+        const serviceName = cardItem.querySelector('h3').innerText;
+        const serviceNum = cardItem.querySelector('h1').innerText;
         const time = new Date().toLocaleTimeString();
         const coinCount = getElemetNumber('coin-count');
         if (coinCount < 20) {
-            alert("❌Your coin is insufficent. You 20 coins to make a call. ")
+            alert("❌Your coin is insufficent. You need 20 coins to make a call. ")
         }
         else {
             alert("✅calling " + serviceName + " " + serviceNum);
@@ -53,24 +50,24 @@ document.getElementById('card-container').addEventListener('click', function (ev
         }
 
     }
+    // copy button funtionality
+    const copyButton = event.target.closest('.copy-btn');
+    if (copyButton) {
+        // get number
+        const number = cardItem.querySelector('h1').innerText;
+        // aleart
+        alert(number + " number is copied");
+         // copy to clipboard
+        navigator.clipboard.writeText(number);
+        // increase copy count
+        const copyCount = getElemetNumber('copy-count');
+        setElement('copy-count', copyCount + 1);
+    }
+
 })
 
 // clear button functionality
 getElement('clear-btn').addEventListener('click', function () {
     const callList = getElement('call-history-container');
     callList.innerHTML = "";
-})
-// copy button funtionality
-document.getElementById('card-container').addEventListener('click', function (event) {
-    if (event.target.className.includes('copy-btn')) {
-        const copyCount = getElemetNumber('copy-count');
-        setElement('copy-count', copyCount + 1);
-        // get number
-        const number = event.target.parentNode.parentNode.children[2].children[0].innerText;
-        // aleart
-        alert(number + " number is copied");
-        const btnText = event.target.parentNode.children[0];
-          // copy to clipboard
-        navigator.clipboard.writeText(number);
-    }
 })
